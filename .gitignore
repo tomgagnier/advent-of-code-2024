@@ -8,3 +8,6 @@ wheels/
 
 # venv
 .venv
+
+# Advent of Code forbids publishing input
+input.txt
