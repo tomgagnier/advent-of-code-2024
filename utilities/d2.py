@@ -9,12 +9,11 @@ class Matrix:
 
     @classmethod
     def from_lines(cls, lines: list[str]) -> Self:
-        return Matrix([list(line.strip()) for line in lines])
+        return Matrix([list(list(line.strip())) for line in lines])
 
     @classmethod
-    def from_str(cls, text: str) -> Self:
-        return Matrix(list(map(lambda l: l.strip(),
-                               textwrap.dedent(text).strip().split('\n'))))
+    def from_multiline_str(cls, text: str) -> Self:
+        return Matrix.from_lines(textwrap.dedent(text).strip().split('\n'))
 
     def __getitem__(self, coordinates: tuple[int, int]) -> str:
         return self.elements[self.max_j - 1 - coordinates[1]][coordinates[0]]
@@ -41,16 +40,12 @@ class Matrix:
     def max_j(self) -> int:
         return len(self.elements)
 
-    def get(self, coordinates: tuple[int, int], default: Any) -> Any:
+    def get(self, coordinates: tuple[int, int], default: str | None = None) -> Any:
         return self[coordinates] if coordinates in self else default
 
-    def set(self, value: str, *coordinates: tuple[int, int]):
-
-        return
-
     def find(self, predicate: Callable[[str], bool]) -> tuple[int, int] | None:
-        return next((coordinate for coordinate in self if predicate(self[coordinate])),
-                    None)
+        matches = (coordinate for coordinate in self if predicate(self[coordinate]))
+        return next(matches, None)
 
     def neighbors(self, coordinates: tuple[int, int]) -> list[tuple[int, int]]:
         i, j = coordinates
