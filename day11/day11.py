@@ -1,4 +1,4 @@
-import unittest
+import utilities.unittest
 
 
 def split_if_even_length(i: int) -> tuple[int, int] | None:
@@ -37,9 +37,13 @@ def count_descendants(stones: list[int], number_of_blinks: int) -> int:
 STONES = [28, 4, 3179, 96938, 0, 6617406, 490, 816207]
 
 
-class TestDay11(unittest.TestCase):
-    def test_example(self):
+class TestDay11(utilities.unittest.TimedTestCase):
+
+    def test_example_25(self):
         assert 55312 == count_descendants([125, 17], 25)
+
+    def test_example_75(self):
+        assert 65601038650482 == count_descendants([125, 17], 75)
 
     def test_part1(self):
         assert 189167 == count_descendants(STONES, 25)
