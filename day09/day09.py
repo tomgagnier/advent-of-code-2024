@@ -2,6 +2,7 @@ import re
 from dataclasses import dataclass
 from itertools import repeat
 from typing import Self, Callable
+from unittest import TestCase
 
 
 @dataclass
@@ -51,7 +52,7 @@ class Disk:
 
     def part1(self) -> Self:
         free = self.first_free_block(0)
-        last = self.last_used_block(len(self.ids))
+        last = self.last_used_block(len(self.ids) - 1)
         while free < last:
             self[free] = self[last]
             self.ids[last] = -1
@@ -95,12 +96,17 @@ class Disk:
     def checksum(self) -> int:
         return sum([i * ID for i, ID in enumerate(self.ids) if ID >= 0])
 
+class Test(TestCase):
 
-def main(input_file: str):
-    print(input_file)
-    # print('    part1 ', Disk.from_file(input_file).part1().checksum())
-    print('    part2 ', Disk.from_file(input_file).part2().checksum())
+    def setUp(self):
+        self.example = Disk.from_file('example.txt')
 
+    def test_part1(self):
+        self.assertEqual(1928, self.example.part1().checksum())
 
-main('example.txt')
-main('input.txt')
+    def test_part2(self):
+        self.assertEqual(2858, self.example.part2().checksum())
+
+input_file = 'input.txt'
+print('part1 ', Disk.from_file(input_file).part1().checksum())
+print('part2 ', Disk.from_file(input_file).part2().checksum())
