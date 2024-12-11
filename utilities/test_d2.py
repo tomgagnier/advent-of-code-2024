@@ -3,7 +3,7 @@ import unittest
 import d2
 from utilities.d2 import Coordinate
 
-matrix = d2.Matrix.from_multiline_str(
+matrix = d2.StringMatrix.from_multiline_str(
     """
     abc
     def

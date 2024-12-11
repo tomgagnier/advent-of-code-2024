@@ -6,6 +6,12 @@ NEIGHBOR_OFFSETS = [
     (-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1)
 ]
 
+def neighbors(t: tuple[int, int]) -> Iterator[tuple[int, int]]:
+    def add(offset: tuple[int, int]) -> tuple[int, int]:
+        return t[0] + offset[0], t[1] + offset[1]
+
+    return map(add, [(-1, 0), (0, 1), (1, 0), (0, -1)])
+
 
 @dataclass(frozen=True, eq=True)
 class Coordinate:
@@ -47,21 +53,21 @@ class Coordinate:
 
 
 @dataclass(frozen=True)
-class Matrix:
+class StringMatrix:
     elements: list[list[str]]
 
     @classmethod
     def from_lines(cls, lines: list[str]) -> Self:
-        return Matrix([list(list(line.strip())) for line in lines])
+        return StringMatrix([list(list(line.strip())) for line in lines])
 
     @classmethod
     def from_multiline_str(cls, text: str) -> Self:
-        return Matrix.from_lines(textwrap.dedent(text).strip().split('\n'))
+        return StringMatrix.from_lines(textwrap.dedent(text).strip().split('\n'))
 
     @classmethod
     def from_file(cls, input_file):
         with (open(input_file, 'r') as file):
-            return Matrix.from_lines(file.readlines())
+            return StringMatrix.from_lines(file.readlines())
 
     def __getitem__(self, coordinate: Coordinate | tuple[int, int]) -> str:
         return self.elements[self.max_j - 1 - coordinate[1]][coordinate[0]]
